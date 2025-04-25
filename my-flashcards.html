@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Flashcards - NeuroFlash</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <span class="logo-text">NeuroFlash</span>
+                <span class="logo-subtext">AI-Powered Learning</span>
+            </div>
+
+            <!-- User Profile -->
+            <div class="user-profile">
+                <img src="https://static.vecteezy.com/system/resources/previews/024/354/252/non_2x/businessman-isolated-illustration-ai-generative-free-photo.jpg" alt="Profile Picture" id="userProfilePic">
+                <h3 id="userName">Shahanwaj</h3>
+                <p id="userEmail">john@example.com</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="main-nav">
+                <button href="#" class="dashboard-button" id="dashboard-button" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </button>
+                <button class="myflashcard-button"  href="#" onclick="window.location.href='my-flashcards.html'">
+                    <i class="fas fa-book"></i>
+                    My Flashcards
+                </button>
+                <button id="setting-button" class="setting-button" href="#" onclick="window.location.href='settings.html'">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </nav>
+
+            <button class="change-password-btn" id="change-password-btn" onclick="window.location.href='changepassword.html'">
+                <i class="fas fa-key"></i>
+                Change Password
+            </button>
+            
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1>My Flashcards</h1>
+                <div class="header-actions">
+                     
+                </div>
+            </div>
+            
+            <div class="content-body">
+                <div class="search-filter-bar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchFlashcards" placeholder="Search flashcards...">
+                    </div>
+                    <div class="filter-options">
+                        <select id="complexityFilter">
+                            <option value="all">All Complexities</option>
+                            <option value="basic">Basic</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                        <select id="timeFilter">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="savedFlashcardsContainer" class="flashcard-sets-container">
+                    <!-- Flashcard sets will be loaded here -->
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading your flashcards...</p>
+                    </div>
+                    <div class="empty-state" style="display: none;">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No flashcard sets saved yet. Create some flashcards to get started!</p>
+                        <a href="dashboard.html" class="btn-primary">Create Flashcards</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashcardSetsContainer = document.getElementById('savedFlashcardsContainer');
+            const loadingState = document.querySelector('.loading-state');
+            const emptyState = document.querySelector('.empty-state');
+            
+            // Show loading state immediately
+            loadingState.style.display = 'flex';
+            flashcardSetsContainer.style.display = 'none';
+            emptyState.style.display = 'none';
+
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('userData'));
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load flashcard sets with a small delay to ensure smooth transition
+            setTimeout(() => {
+                // Call the loadSavedFlashcards function to load and display the flashcards
+                loadSavedFlashcards();
+                
+                // Setup search and filter functionality
+                setupFlashcardSearchAndFilter();
+            }, 300);
+        });
+        
+        // Setup search and filter functionality
+        function setupFlashcardSearchAndFilter() {
+            const searchInput = document.getElementById('searchFlashcards');
+            const complexityFilter = document.getElementById('complexityFilter');
+            const timeFilter = document.getElementById('timeFilter');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', filterSavedFlashcards);
+            }
+            
+            if (complexityFilter) {
+                complexityFilter.addEventListener('change', filterSavedFlashcards);
+            }
+            
+            if (timeFilter) {
+                timeFilter.addEventListener('change', filterSavedFlashcards);
+            }
+        }
+        
+        // Filter saved flashcards
+        function filterSavedFlashcards() {
+            const searchTerm = document.getElementById('searchFlashcards').value.toLowerCase();
+            const complexityFilter = document.getElementById('complexityFilter').value;
+            const timeFilter = document.getElementById('timeFilter').value;
+            
+            const currentUser = JSON.parse(localStorage.getItem('userData'));
+            if (!currentUser) return;
+            
+            let savedSets = JSON.parse(localStorage.getItem(`flashcard_sets_${currentUser.email}`)) || [];
+            
+            // Apply filters
+            savedSets = savedSets.filter(set => {
+                const matchesSearch = set.title.toLowerCase().includes(searchTerm);
+                
+                const matchesComplexity = complexityFilter === 'all' || set.complexity === complexityFilter;
+                
+                const date = new Date(set.dateCreated);
+                const now = new Date();
+                let matchesTime = true;
+                
+                if (timeFilter === 'today') {
+                    matchesTime = date.toDateString() === now.toDateString();
+                } else if (timeFilter === 'week') {
+                    const weekAgo = new Date(now.setDate(now.getDate() - 7));
+                    matchesTime = date >= weekAgo;
+                } else if (timeFilter === 'month') {
+                    const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
+                    matchesTime = date >= monthAgo;
+                }
+                
+                return matchesSearch && matchesComplexity && matchesTime;
+            });
+            
+            displayFilteredFlashcards(savedSets);
+        }
+        
+        // Display filtered flashcards
+        function displayFilteredFlashcards(filteredSets) {
+            const flashcardsContainer = document.getElementById('savedFlashcardsContainer');
+            if (!flashcardsContainer) return;
+            
+            if (filteredSets.length === 0) {
+                flashcardsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <p>No flashcards match your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const setsHTML = filteredSets.map(set => `
+                <div class="flashcard-set" data-set-id="${set.id}">
+                    <div class="set-header">
+                        <h3>${set.title}</h3>
+                        <span class="card-count">${set.totalCards} cards</span>
+                    </div>
+                    <div class="set-info">
+                        <p>Complexity: ${set.complexity}</p>
+                        <p>Created: ${new Date(set.dateCreated).toLocaleDateString()}</p>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${set.progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="set-actions">
+                        <button onclick="viewFlashcardSet('${set.id}')" class="btn-secondary">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                        <button onclick="deleteFlashcardSet('${set.id}')" class="btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            flashcardsContainer.innerHTML = setsHTML;
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('userData');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

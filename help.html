@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - NeuroFlash</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar (Same as dashboard) -->
+        <!-- ... -->
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1>Help Center</h1>
+                <div class="breadcrumb">
+                    <span>Help</span>
+                </div>
+            </div>
+            
+            <div class="help-container">
+                <div class="help-search">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search help articles...">
+                        <button class="btn-primary">Search</button>
+                    </div>
+                </div>
+                
+                <div class="faq-section">
+                    <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How do I generate flashcards?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>To generate flashcards, go to the Dashboard, enter your content or upload a file, and click "Generate Flashcards". Our AI will create concise flashcards from your material.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Can I edit generated flashcards?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! After generation, you can click on any flashcard to edit its content before saving to your history.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- More FAQ items -->
+                </div>
+                
+                <div class="contact-support">
+                    <h2><i class="fas fa-headset"></i> Contact Support</h2>
+                    <form id="supportForm">
+                        <div class="input-with-label">
+                            <label for="supportSubject">Subject</label>
+                            <input type="text" id="supportSubject" placeholder="What's your issue about?" required>
+                        </div>
+                        
+                        <div class="input-with-label">
+                            <label for="supportMessage">Message</label>
+                            <textarea id="supportMessage" placeholder="Describe your issue in detail..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

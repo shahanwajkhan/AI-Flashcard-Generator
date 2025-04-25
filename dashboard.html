@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NeuroFlash</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add loading animation styles -->
+    <style>
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--primary-color);
+        }
+        .loading-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .fa-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <span class="logo-text">NeuroFlash</span>
+                <span class="logo-subtext">AI-Powered Learning</span>
+            </div>
+
+            <!-- User Profile -->
+            <div class="user-profile">
+                <img src="https://static.vecteezy.com/system/resources/previews/024/354/252/non_2x/businessman-isolated-illustration-ai-generative-free-photo.jpg" alt="Profile Picture" id="userProfilePic">
+                <h3 id="userName">Shahanwaj</h3>
+                <p id="userEmail">john@example.com</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="main-nav">
+                <button href="#" class="dashboard-button" id="dashboard-button" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </button>
+                <button class="myflashcard-button"  href="#" onclick="window.location.href='my-flashcards.html'">
+                    <i class="fas fa-book"></i>
+                    My Flashcards
+                </button>
+                <button id="setting-button" class="setting-button" href="#" onclick="window.location.href='settings.html'">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </nav>
+
+            <button class="change-password-btn" id="change-password-btn" onclick="window.location.href='changepassword.html'">
+                <i class="fas fa-key"></i>
+                Change Password
+            </button>
+            
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1>Generate Flashcards</h1>
+                <p>Create AI-powered flashcards from your content</p>
+            </div>
+
+            <div class="content-grid">
+                <!-- Input Section -->
+                <div class="input-section">
+                    <h2>Input Content</h2>
+                    
+                    <div class="input-group">
+                        <label for="contentTitle">Title</label>
+                        <input type="text" id="contentTitle" placeholder="Enter a title for your flashcards">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="contentInput">Content</label>
+                        <textarea id="contentInput" placeholder="Enter your text content here or upload a PDF file"></textarea>
+                    </div>
+
+                    <div class="file-upload">
+                        <label class="upload-btn">
+                            <i class="fas fa-file-upload"></i>
+                            Upload PDF
+                            <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                        </label>
+                        <span id="fileName"></span>
+                    </div>
+
+                    <div class="options-row">
+                        <div class="option-group">
+                            <label for="flashcardCount">Number of Flashcards</label>
+                            <select id="flashcardCount">
+                                <option value="5">5 cards</option>
+                                <option value="10" selected>10 cards</option>
+                                <option value="15">15 cards</option>
+                                <option value="20">20 cards</option>
+                            </select>
+                        </div>
+
+                        <div class="option-group">
+                            <label for="complexity">Complexity Level</label>
+                            <select id="complexity">
+                                <option value="basic">Basic</option>
+                                <option value="intermediate" selected>Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button id="generateBtn" class="generate-btn">
+                        <i class="fas fa-magic"></i>
+                        Generate Flashcards
+                    </button>
+                </div>
+
+                <!-- Flashcards Section -->
+                <div class="flashcards-section">
+                    <div class="section-header">
+                        <h2>Generated Flashcards</h2>
+                        <div class="actions">
+                            <button class="copy-btn" onclick="copyFlashcards()">
+                                <i class="fas fa-copy"></i>
+                                Copy All
+                            </button>
+                             
+                        </div>
+                    </div>
+
+                    <div id="flashcardsContainer" class="flashcards-container">
+                        <div class="empty-state">
+                            <i class="fas fa-lightbulb"></i>
+                            <p>Generate flashcards to see them here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

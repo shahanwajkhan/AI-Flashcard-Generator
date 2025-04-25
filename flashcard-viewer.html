@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Flashcards - NeuroFlash</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <span class="logo-text">NeuroFlash</span>
+                <span class="logo-subtext">AI-Powered Learning</span>
+            </div>
+            
+            <div class="user-profile">
+                <img src="https://static.vecteezy.com/system/resources/previews/024/354/252/non_2x/businessman-isolated-illustration-ai-generative-free-photo.jpg" alt="Profile Picture" id="userProfilePic">
+                <h3 id="userName">John Doe</h3>
+                <p id="userEmail">john@example.com</p>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="my-flashcards.html" class="active">
+                    <i class="fas fa-book"></i>
+                    My Flashcards
+                </a>
+                <a href="#">
+                    <i class="fas fa-history"></i>
+                    History
+                </a>
+                <a href="#">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </nav>
+            
+            <button class="change-password-btn">
+                <i class="fas fa-key"></i>
+                Change Password
+            </button>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <div class="header-left">
+                    <a href="my-flashcards.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 id="setTitle">Loading...</h1>
+                        <p id="setInfo">Loading...</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button onclick="shuffleFlashcards()" class="btn-secondary">
+                        <i class="fas fa-random"></i> Shuffle
+                    </button>
+                    <button onclick="copyFlashcards()" class="btn-secondary">
+                        <i class="fas fa-copy"></i> Copy All
+                    </button>
+                </div>
+            </div>
+
+            <div class="viewer-container">
+                <div class="flashcards-viewer" id="flashcardsViewer">
+                    <!-- Flashcards will be displayed here -->
+                </div>
+
+                <div class="viewer-controls">
+                    <button onclick="previousCard()" class="btn-nav" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span id="cardCounter">Card 0 of 0</span>
+                    <button onclick="nextCard()" class="btn-nav" id="nextBtn" disabled>
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="flashcard-viewer.js"></script>
+</body>
+</html> 
